@@ -1,0 +1,228 @@
+{
+  "openapi" : "3.1.0",
+  "info" : {
+    "title" : "Swagger Petstore - OpenAPI 3.0",
+    "description" : "This is a sample Pet Store Server based on the OpenAPI 3.1 specification.\nYou can find out more about\nSwagger at [http://swagger.io](http://swagger.io).",
+    "termsOfService" : "http://swagger.io/terms/",
+    "contact" : {
+      "email" : "apiteam@swagger.io"
+    },
+    "license" : {
+      "name" : "Apache 2.0 AND (MIT OR GPL-2.0-only)",
+      "identifier" : "Apache-2.0 AND (MIT OR GPL-2.0-only)"
+    },
+    "version" : "1.0",
+    "summary" : "Pet Store 3.1",
+    "x-namespace" : "swagger"
+  },
+  "externalDocs" : {
+    "description" : "Find out more about Swagger",
+    "url" : "http://swagger.io"
+  },
+  "servers" : [ {
+    "url" : "/api/v31"
+  } ],
+  "tags" : [ {
+    "name" : "pet",
+    "description" : "Everything about your Pets",
+    "externalDocs" : {
+      "description" : "Find out more",
+      "url" : "http://swagger.io"
+    }
+  }, {
+    "name" : "store",
+    "description" : "Access to Petstore orders",
+    "externalDocs" : {
+      "description" : "Find out more about our store",
+      "url" : "http://swagger.io"
+    }
+  }, {
+    "name" : "user",
+    "description" : "Operations about user"
+  } ],
+  "paths" : {
+    "/pet" : {
+      "put" : {
+        "tags" : [ "pet" ],
+        "summary" : "Update an existing pet",
+        "operationId" : "updatePet",
+        "requestBody" : {
+          "description" : "Pet object that needs to be updated in the store",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "description" : "A Pet in JSON Format",
+                "required" : [ "id" ],
+                "writeOnly" : true
+              }
+            },
+            "application/xml" : {
+              "schema" : {
+                "description" : "A Pet in XML Format",
+                "required" : [ "id" ],
+                "writeOnly" : true
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Successful operation",
+            "content" : {
+              "application/xml" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Pet",
+                  "description" : "A Pet in XML Format",
+                  "readOnly" : true
+                }
+              },
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Pet",
+                  "description" : "A Pet in JSON Format",
+                  "readOnly" : true
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid ID supplied"
+          },
+          "404" : {
+            "description" : "Pet not found"
+          },
+          "405" : {
+            "description" : "Validation exception"
+          }
+        },
+        "security" : [ {
+          "petstore_auth" : [ "write:pets", "read:pets" ]
+        }, {
+          "mutual_tls" : [ ]
+        } ]
+      }
+    },
+    "/test/status" : {
+      "get" : {
+        "description" : "Get status",
+        "operationId" : "getStatus",
+        "responses" : {
+          "default" : {
+            "description" : "default response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "Category" : {
+        "description" : "Category",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 10
+          },
+          "name" : {
+            "type" : "string",
+            "example" : "Dogs"
+          }
+        }
+      },
+      "Pet" : {
+        "$id" : "$id: /components/schemas/pet",
+        "$schema" : "https://json-schema.org/draft/2020-12/schema",
+        "description" : "Pet",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "example" : 10
+          },
+          "category" : {
+            "$ref" : "#/components/schemas/Category",
+            "description" : "Pet Category"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "photoUrls" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "xml" : {
+                "name" : "photoUrl"
+              }
+            },
+            "xml" : {
+              "wrapped" : true
+            }
+          },
+          "tags" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Tag"
+            },
+            "xml" : {
+              "wrapped" : true
+            }
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "pet status in the store",
+            "enum" : [ "available,pending,sold" ]
+          }
+        },
+        "required" : [ "name", "photoUrls" ],
+        "xml" : {
+          "name" : "Pet"
+        }
+      },
+      "Tag" : {
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64"
+          },
+          "name" : {
+            "type" : "string"
+          }
+        },
+        "xml" : {
+          "name" : "Tag"
+        }
+      }
+    }
+  },
+  "webhooks" : {
+    "newPet" : {
+      "post" : {
+        "requestBody" : {
+          "description" : "Information about a new pet in the system",
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Pet",
+                "description" : "Webhook Pet"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Return a 200 status to indicate that the data was received successfully"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,19 +1,3 @@
-/**
- * Copyright 2018 SmartBear Software
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package io.swagger.petstore.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -24,6 +8,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.List;
 
+@Schema(
+        description = "Pet",
+        $schema = "https://json-schema.org/draft/2020-12/schema",
+        $id = "$id: /components/schemas/pet",
+        type = "object"
+)
 @XmlRootElement(name = "Pet")
 public class Pet {
     private Long id;
@@ -33,7 +23,7 @@ public class Pet {
     private List<Tag> tags = new ArrayList<>();
     private String status;
 
-    @XmlElement(name = "id")
+    @Schema(example = "10")
     public long getId() {
         return id;
     }
@@ -42,7 +32,7 @@ public class Pet {
         this.id = id;
     }
 
-    @XmlElement(name = "category")
+    @Schema(description = "Pet Category")
     public Category getCategory() {
         return category;
     }
@@ -52,6 +42,7 @@ public class Pet {
     }
 
     @XmlElement(name = "name")
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
     public String getName() {
         return name;
     }
@@ -62,6 +53,7 @@ public class Pet {
 
     @XmlElementWrapper(name = "photoUrls")
     @XmlElement(name = "photoUrl")
+    @Schema(requiredMode = Schema.RequiredMode.REQUIRED)
     public List<String> getPhotoUrls() {
         return photoUrls;
     }
